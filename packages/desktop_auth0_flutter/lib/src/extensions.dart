@@ -1,4 +1,4 @@
-// We need fromClaims :)
+// We need UserProfileExtension.fromClaims
 // ignore: implementation_imports
 import 'package:auth0_flutter/src/web/extensions/user_profile_extension.dart' show UserProfileExtension;
 import 'package:auth0_flutter_platform_interface/auth0_flutter_platform_interface.dart';
@@ -24,11 +24,11 @@ extension Oauth2CredentialsExtension on oauth2.Credentials {
 extension CredentialsExtension on Credentials {
   /// Convert Auth0's Credentials to oauth2's Credentials
   oauth2.Credentials toOauth2Credentials({required Uri tokenEndpoint}) => oauth2.Credentials(
-    accessToken,
-    refreshToken: refreshToken,
-    idToken: idToken,
-    tokenEndpoint: tokenEndpoint,
-    scopes: scopes,
-    expiration: expiresAt,
-  );
+        accessToken,
+        refreshToken: refreshToken,
+        idToken: idToken,
+        tokenEndpoint: tokenEndpoint,
+        scopes: scopes,
+        expiration: expiresAt,
+      );
 }

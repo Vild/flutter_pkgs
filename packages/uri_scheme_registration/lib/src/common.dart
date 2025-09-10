@@ -1,4 +1,3 @@
-// Tiny Platform wrapper around [registerWindowsScheme] and [registerLinuxScheme]
 import 'dart:io';
 
 import 'package:uri_scheme_registration/src/linux_registration.dart';
