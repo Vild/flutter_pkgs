@@ -1,0 +1,17 @@
+name: uri_scheme_registration
+description: A package to register uri schemes for linux and windows.
+version: 0.1.0
+homepage: https://github.com/Vild/flutter_pkgs
+
+resolution: workspace
+
+environment:
+  sdk: ">=3.5.0 <4.0.0"
+
+dependencies:
+  ffi: ^2.1.4
+  win32: ^5.14.0
+
+dev_dependencies:
+  lints: ^6.0.0
+  test: ^1.26.3

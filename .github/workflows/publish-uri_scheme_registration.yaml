@@ -1,0 +1,38 @@
+name: Publish to pub.dev - uri_scheme_registration
+
+on:
+  push:
+    tags:
+      - "uri_scheme_registration-v[0-9]+.[0-9]+.[0-9]+"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: publish-${{ github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      id-token: write # Required for authentication using OIDC
+
+    defaults:
+      run:
+        working-directory: packages/uri_scheme_registration
+    steps:
+      - uses: actions/checkout@v4
+      - if: steps.changes.outputs.src == 'true'
+        name: Setup Flutter SDK
+        uses: flutter-actions/setup-flutter@v4.0
+        with:
+          version: 3.35.3
+          cache: true
+          cache-sdk: true
+          cache-key: pub-${{ runner.os }}-${{ hashFiles('pubspec.lock') }}
+      - name: Get dependencies
+        run: dart pub get
+      - name: Publish
+        run: dart pub publish --force

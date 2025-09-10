@@ -1,0 +1,360 @@
+include: package:flutter_lints/flutter.yaml
+
+analyzer:
+  # Exclude generated and build files from analysis
+  # These files are automatically generated and should not be manually edited
+  exclude:
+    - "**/build/*.dart" # Build system artifacts
+
+  # Configure error handling behavior
+  errors:
+    # Allow flexible annotation usage - some annotations may target different elements
+    # depending on code generation context
+    invalid_annotation_target: ignore
+
+  # Enable analyzer plugins for enhanced linting
+  plugins:
+    - custom_lint # Enables custom lint rules from riverpod_lint, freezed_lint, etc.
+
+  # Language feature configuration for stricter type checking
+  language:
+    strict-casts: true # Require explicit casts, prevent implicit downcasts
+    strict-raw-types: true # Require generic type parameters on raw types
+    strict-inference: true # Use stricter type inference rules
+
+# Dart formatter configuration
+formatter:
+  # Set line length to 120 characters for modern wide displays
+  # This balances readability with reduced line wrapping
+  page_width: 120
+
+# Linter rules configuration
+# Rules are organized by category for maintainability
+linter:
+  rules:
+    # === CODE QUALITY & MAINTAINABILITY ===
+
+    # Type annotations and declarations
+    - always_declare_return_types # Explicit return types improve code readability and catch type errors
+    - always_put_required_named_parameters_first # Consistent parameter ordering improves API usability
+    - always_specify_types: false # Conflicts with omit_local_variable_types; prefer type inference where clear
+    - always_use_package_imports # Package imports maintain clear module boundaries
+    - annotate_overrides # @override annotations prevent accidental method signatures changes
+    - annotate_redeclares # Mark redeclared members explicitly
+    - type_annotate_public_apis # Public APIs must have explicit types for consumers
+    - type_init_formals # Type initializing formals for clarity
+
+    # Control flow and structure
+    - always_put_control_body_on_new_line: false # Allow compact control structures for simple cases
+    - curly_braces_in_flow_control_structures # Always use braces to prevent ambiguity
+    - avoid_empty_else # Empty else blocks often indicate missing logic
+    - control_flow_in_finally # Prevent control flow statements in finally blocks
+
+    # Dynamic types and null safety
+    - avoid_annotating_with_dynamic: false # Explicit dynamic annotations show intentional usage
+    - avoid_dynamic_calls: false # Required for GraphQL client flexibility and generated code
+    - cast_nullable_to_non_nullable # Use explicit null checks instead of casts
+    - null_check_on_nullable_type_parameter # Prevent null checks on nullable type parameters
+    - null_closures # Avoid null closures
+
+    # === PERFORMANCE & RESOURCE MANAGEMENT ===
+
+    # Memory and resource management
+    - close_sinks # Always close StreamSinks to prevent memory leaks
+    - cancel_subscriptions # Cancel stream subscriptions to prevent memory leaks
+    - avoid_slow_async_io # Use async I/O operations appropriately
+    - discarded_futures # Handle returned futures or mark as unawaited
+    - unawaited_futures # Mark futures that are intentionally not awaited
+
+    # Widget and Flutter performance
+    - avoid_unnecessary_containers # Container widgets add overhead; prefer specialized widgets
+    - sized_box_for_whitespace # SizedBox is more efficient than Container for spacing
+    - sized_box_shrink_expand # Use SizedBox.shrink() and SizedBox.expand() for common cases
+    - use_colored_box # ColoredBox is more efficient than Container with color
+    - use_decorated_box # DecoratedBox is more efficient than Container with decoration
+    - use_key_in_widget_constructors # Keys help Flutter optimize widget tree updates
+
+    # === ERROR HANDLING & DEBUGGING ===
+
+    # Exception handling patterns
+    - avoid_catches_without_on_clauses # Catch specific exception types for better error handling
+    - avoid_catching_errors # Catch exceptions, not errors (which indicate programmer mistakes)
+    - only_throw_errors # Throw Error subclasses or Exception implementations
+    - use_rethrow_when_possible # Use rethrow to preserve stack traces
+    - throw_in_finally # Avoid throw statements in finally blocks
+
+    # Development and debugging
+    - avoid_print # Use logging framework instead of print() in production code
+    - avoid_private_typedef_functions # Don't use private typedefs for function types
+    - diagnostic_describe_all_properties: false # Not required for internal packages
+    - flutter_style_todos: false # Allow flexible TODO comment styles
+
+    # === LANGUAGE FEATURES & PATTERNS ===
+
+    # Boolean and conditional logic
+    - avoid_bool_literals_in_conditional_expressions # Use direct boolean expressions instead of condition ? true : false
+    - no_literal_bool_comparisons # Use direct boolean expressions instead of == true/false
+    - literal_only_boolean_expressions # Boolean expressions should contain boolean literals only
+    - prefer_conditional_assignment # Use ??= and similar operators when appropriate
+
+    # Collection and iteration patterns
+    - avoid_function_literals_in_foreach_calls # Use for-in loops instead of forEach for better performance
+    - cascade_invocations # Use cascades for multiple method calls on same object
+    - prefer_for_elements_to_map_fromIterable # Use for elements in collection literals
+    - prefer_foreach # Use forEach for side effects, for-in for transformations
+    - prefer_iterable_whereType # Use whereType<T>() instead of where((x) => x is T).cast<T>()
+    - prefer_spread_collections # Use spread operator instead of addAll()
+
+    # === FLUTTER & PLATFORM SPECIFIC ===
+
+    # Web and platform compatibility
+    - avoid_web_libraries_in_flutter # Prevent direct web library usage in Flutter code
+    - avoid_js_rounded_ints # Avoid integers that may be rounded in JavaScript
+    - invalid_runtime_check_with_js_interop_types # Prevent invalid runtime checks with JS interop
+
+    # Flutter-specific patterns
+    - no_logic_in_create_state # Keep createState() methods simple
+    - sort_child_properties_last # Sort child properties last in widget constructors
+    - use_build_context_synchronously # Don't use BuildContext across async gaps
+    - use_full_hex_values_for_flutter_colors # Use full 8-digit hex values for colors with alpha
+
+    # === CODE STYLE & CONSISTENCY ===
+
+    # Naming and declarations
+    - camel_case_extensions # Extension names should be camelCase
+    - camel_case_types # Type names should be CamelCase
+    - constant_identifier_names # Constants should be SCREAMING_SNAKE_CASE
+    - non_constant_identifier_names # Variables should be camelCase
+    - file_names # File names should be snake_case
+    - library_names # Library names should be snake_case
+    - library_prefixes # Library prefixes should be snake_case
+    - package_names # Package names should be snake_case
+
+    # Import and library organization
+    - avoid_relative_lib_imports # Use package: imports instead of relative lib/ imports
+    - depend_on_referenced_packages # Depend on packages that you import
+    - directives_ordering # Order import directives consistently
+    - implementation_imports # Don't import implementation files
+    - library_private_types_in_public_api # Avoid private types in public APIs
+    - package_prefixed_library_names # Library names should be prefixed with package name
+    - prefer_relative_imports: false # Prefer package imports for consistency
+    - sort_pub_dependencies # Sort dependencies in pubspec.yaml
+
+    # === ADVANCED PATTERNS & BEST PRACTICES ===
+
+    # Class and inheritance patterns
+    - avoid_classes_with_only_static_members # Use top-level functions instead of static-only classes
+    - avoid_implementing_value_types # Don't implement built-in value types
+    - prefer_mixin # Use mixins instead of inheritance where appropriate
+    - avoid_equals_and_hash_code_on_mutable_classes # Implement equals/hashCode only on immutable classes
+    - hash_and_equals # If you override one, override both
+
+    # Parameter and method patterns
+    - avoid_positional_boolean_parameters: false # TODO: Consider enabling to improve API clarity
+    - avoid_unused_constructor_parameters # Remove unused constructor parameters
+    - parameter_assignments # Don't reassign method parameters
+    - avoid_setters_without_getters # Setters should have corresponding getters
+    - avoid_return_types_on_setters # Setters should not declare return types
+
+    # Type system and generics
+    - avoid_shadowing_type_parameters # Don't shadow type parameters with local variables
+    - avoid_types_as_parameter_names # Don't use type names as parameter names
+    - avoid_types_on_closure_parameters # Let closure parameter types be inferred
+    - tighten_type_of_initializing_formals # Use more specific types for initializing formals
+
+    # === DISABLED RULES WITH RATIONALE ===
+
+    # Experimental or conflicting rules
+    - avoid_futureor_void: false # Experimental rule with unclear benefit
+    - lines_longer_than_80_chars: false # Using 120-char limit via formatter instead
+    - public_member_api_docs: false # Not required for internal packages
+    - unnecessary_async: false # Conflicts with discarded_futures rule
+    - avoid_redundant_argument_values: false # TODO: Evaluate if this adds value vs noise
+
+    # Project-specific exceptions
+    - prefer_final_parameters: false # TODO: Evaluate impact on existing codebase
+    - require_trailing_commas: false # Formatter handles this automatically
+
+    # === ADDITIONAL LANGUAGE & SAFETY RULES ===
+
+    # Async/await patterns
+    - await_only_futures # Only await Future objects
+    - avoid_void_async # Async functions should return Future<T>, not void
+    - unnecessary_await_in_return # Don't await in return statements
+
+    # Variable and declaration patterns
+    - avoid_field_initializers_in_const_classes # Use constructor initialization lists in const classes
+    - avoid_final_parameters # Parameters are implicitly final
+    - avoid_init_to_null # Don't explicitly initialize to null
+    - avoid_multiple_declarations_per_line # One variable declaration per line
+    - prefer_final_fields # Use final for fields that don't change
+    - prefer_final_in_for_each # Use final in for-each loops
+    - prefer_final_locals # Use final for local variables that don't change
+    - prefer_typing_uninitialized_variables # Type uninitialized variables
+
+    # String and text handling
+    - avoid_escaping_inner_quotes # Use raw strings or different quote types to avoid escaping
+    - missing_whitespace_between_adjacent_strings # Add whitespace between adjacent strings
+    - no_adjacent_strings_in_list # Don't use adjacent strings in lists
+    - prefer_adjacent_string_concatenation # Use string juxtaposition instead of + for literals
+    - prefer_double_quotes: false # Use single quotes for strings (project convention)
+    - prefer_interpolation_to_compose_strings # Use string interpolation instead of concatenation
+    - prefer_single_quotes # Use single quotes for strings (project convention)
+    - unnecessary_brace_in_string_interps # Remove unnecessary braces in string interpolation
+    - unnecessary_raw_strings # Don't use raw strings when not needed
+    - unnecessary_string_escapes # Remove unnecessary string escapes
+    - unnecessary_string_interpolations # Use simple strings instead of interpolation when possible
+    - unintended_html_in_doc_comment # Check for unintended HTML in doc comments
+    - use_raw_strings # Use raw strings for strings with backslashes
+    - use_string_buffers # Use StringBuffer for building strings in loops
+    - use_string_in_part_of_directives # Use strings in part of directives
+
+    # Collection and data structure patterns
+    - collection_methods_unrelated_type # Collection method type parameters should be related
+    - no_duplicate_case_values # Switch cases should be unique
+    - no_default_cases # Don't use default cases in switches over enums
+    - prefer_collection_literals # Use collection literals instead of constructors
+    - prefer_contains # Use contains() instead of indexOf() != -1
+    - prefer_is_empty # Use isEmpty instead of length == 0
+    - prefer_is_not_empty # Use isNotEmpty instead of length != 0
+    - prefer_is_not_operator # Use is! instead of !(x is T)
+    - unnecessary_to_list_in_spreads # Don't call toList() when spreading
+
+    # Constant and literal patterns
+    - avoid_double_and_int_checks # Don't check for both double and int
+    - avoid_null_checks_in_equality_operators # Don't check for null in == operators
+    - prefer_const_constructors # Use const constructors when possible
+    - prefer_const_constructors_in_immutables # Use const constructors in immutable classes
+    - prefer_const_declarations # Use const for compile-time constants
+    - prefer_const_literals_to_create_immutables # Use const literals to create immutable collections
+    - unnecessary_const # Remove redundant const keywords
+    - unnecessary_constructor_name # Remove redundant constructor names
+    - use_named_constants # Use named constants instead of magic numbers
+
+    # Method and function patterns
+    - avoid_renaming_method_parameters # Don't rename method parameters in subclasses
+    - avoid_returning_null_for_future # Return Future.value(null) instead of null for Future
+    - avoid_returning_null_for_void # Don't return null for void functions
+    - avoid_returning_this # Avoid returning this from methods
+    - join_return_with_assignment # Combine variable assignment with return
+    - prefer_constructors_over_static_methods # Use constructors instead of static factory methods
+    - prefer_expression_function_bodies # Use => for simple function bodies
+    - prefer_function_declarations_over_variables # Use function declarations instead of variables
+    - prefer_generic_function_type_aliases # Use generic function type aliases
+    - prefer_initializing_formals # Use initializing formals in constructors
+    - prefer_void_to_null # Use void instead of Null type
+    - use_function_type_syntax_for_parameters # Use Function syntax for function parameters
+    - use_super_parameters # Use super parameters in constructors
+
+    # Widget and UI patterns
+    - prefer_if_elements_to_conditional_expressions # Use if elements instead of conditional expressions in collections
+    - prefer_if_null_operators # Use ?? and ??= operators
+    - prefer_inlined_adds # Use collection literals instead of separate add() calls
+    - prefer_null_aware_method_calls # Use ?. for null-aware method calls
+    - prefer_null_aware_operators # Use null-aware operators when appropriate
+    - sort_constructors_first # Sort constructors before other members
+    - sort_unnamed_constructors_first # Sort unnamed constructors before named ones
+
+    # Documentation and comments
+    - comment_references # Check references in doc comments
+    - document_ignores # Document ignore comments
+    - missing_code_block_language_in_doc_comment # Specify language for code blocks in doc comments
+    - slash_for_doc_comments # Use /// for doc comments
+    - provide_deprecation_message # Provide messages for @deprecated annotations
+
+    # Pattern matching and language features (Dart 3.0+)
+    - exhaustive_cases # Ensure switch statements handle all enum values
+    - invalid_case_patterns # Validate case patterns
+    - no_wildcard_variable_uses # Don't use wildcard variables
+    - type_literal_in_constant_pattern # Use type literals in constant patterns
+    - use_enums # Use enums instead of class hierarchies
+    - matching_super_parameters # Match super parameter names
+    - implicit_reopen # Handle implicit reopening of classes
+
+    # Advanced type system features
+    - implicit_call_tearoffs # Use implicit call tearoffs when possible
+    - specify_nonobvious_local_variable_types: false # Conflicts with omit_local_variable_types
+    - specify_nonobvious_property_types: false # Conflicts with omit_obvious_property_types
+    - omit_local_variable_types # Omit obvious local variable types
+    - omit_obvious_local_variable_types # Omit obvious local variable types
+    - omit_obvious_property_types # Omit obvious property types
+    - strict_top_level_inference # Use strict inference for top-level variables
+    - unreachable_from_main # Warn about unreachable code from main
+    - unsafe_variance # Check for unsafe generic variance
+    - use_if_null_to_convert_nulls_to_bools: false # TODO: Evaluate usefulness
+    - use_is_even_rather_than_modulo # Use isEven instead of % 2 == 0
+    - use_late_for_private_fields_and_variables # Use late for private fields and variables
+    - use_truncating_division # Use ~/ for integer division
+
+    # Optimization and efficiency
+    - avoid_type_to_string # Don't call toString() on Type objects
+    - leading_newlines_in_multiline_strings # Use proper formatting for multiline strings
+    - noop_primitive_operations # Avoid no-op operations on primitives
+    - no_runtimeType_toString # Don't call toString() on runtimeType
+    - no_self_assignments # Avoid assigning variables to themselves
+    - prefer_int_literals # Use int literals instead of double for whole numbers
+    - recursive_getters # Avoid recursive getters
+    - test_types_in_equals # Test parameter types in equals() methods
+    - unnecessary_breaks # Remove unnecessary break statements
+    - unnecessary_final: false # Allow final keyword for clarity (conflicts with prefer_final_*)
+    - unnecessary_getters_setters # Remove trivial getters and setters
+    - unnecessary_lambdas # Use tearoffs instead of lambda wrappers
+    - unnecessary_late # Remove unnecessary late keywords
+    - unnecessary_library_directive # Remove unnecessary library directives
+    - unnecessary_library_name # Remove unnecessary library names
+    - unnecessary_new # Remove unnecessary new keywords
+    - unnecessary_null_aware_assignments # Remove unnecessary ??= assignments
+    - unnecessary_null_aware_operator_on_extension_on_nullable # Remove unnecessary ?. on extension methods
+    - unnecessary_null_checks # Remove unnecessary null checks
+    - unnecessary_null_in_if_null_operators # Remove unnecessary null in ?? operators
+    - unnecessary_nullable_for_final_variable_declarations # Remove unnecessary ? on final variable declarations
+    - unnecessary_overrides # Remove unnecessary method overrides
+    - unnecessary_parenthesis # Remove unnecessary parentheses
+    - unnecessary_statements # Remove unnecessary statements
+    - unnecessary_this # Remove unnecessary this references
+    - unnecessary_underscores # Remove unnecessary underscores in numbers
+
+    # Security and validation
+    - secure_pubspec_urls # Use HTTPS URLs in pubspec.yaml
+    - valid_regexps # Validate regular expressions
+    - void_checks # Check void return types
+    - unrelated_type_equality_checks # Warn about equality checks between unrelated types
+    - dangling_library_doc_comments # Warn about dangling library doc comments
+    - deprecated_consistency # Use consistent @deprecated annotations
+    - deprecated_member_use_from_same_package # Warn about deprecated member usage within same package
+
+    # Build and dependency management
+    - combinators_ordering # Order import/export combinators consistently
+    - conditional_uri_does_not_exist # Check that conditional URIs exist
+    - do_not_use_environment # Don't use Platform.environment
+    - eol_at_end_of_file # Ensure files end with newline
+    - library_annotations # Use proper library annotations
+    - no_leading_underscores_for_library_prefixes # Don't use leading underscores for library prefixes
+    - no_leading_underscores_for_local_identifiers # Don't use leading underscores for local identifiers
+
+    # Testing patterns
+    - one_member_abstracts # Use functions instead of single-method abstracts
+    - overridden_fields # Mark overridden fields properly
+    - use_setters_to_change_properties # Use setters to change object properties
+    - use_test_throws_matchers # Use test matchers for exception testing
+    - use_to_and_as_if_applicable # Use to* and as* methods when applicable
+
+    # Miscellaneous patterns and cleanup
+    - avoid_single_cascade_in_expression_statements # Don't use single cascades in expression statements
+    - empty_catches # Don't leave catch blocks empty
+    - empty_constructor_bodies # Use ; instead of {} for empty constructor bodies
+    - empty_statements # Remove empty statements
+    - prefer_asserts_in_initializer_lists # Put asserts in constructor initializer lists
+    - prefer_asserts_with_message # Include messages in assert statements
+
+# Custom lint configuration
+# Enables advanced project-specific lint rules from specialized packages
+custom_lint:
+  # Enable all available rules by default - individual rules can be disabled as needed
+  enable_all_lint_rules: true
+
+  # Project-specific custom rules configuration
+  rules:
+    # Riverpod-specific linting rules
+    - avoid_manual_providers_as_generated_provider_dependency: false # Allow manual providers when appropriate
+    - provider_parameters: true # Enforce proper provider parameter usage

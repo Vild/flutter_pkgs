@@ -1,0 +1,12 @@
+name: flutter_pkgs
+publish_to: none
+environment:
+  sdk: ">=3.5.0 <4.0.0"
+
+workspace:
+  - packages/desktop_auth0_flutter
+  - packages/uri_scheme_registration
+
+dev_dependencies:
+  flutter_lints: ^6.0.0
+  lints: ^6.0.0

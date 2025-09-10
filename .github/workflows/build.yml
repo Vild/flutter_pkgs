@@ -1,0 +1,56 @@
+name: Package build
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    strategy:
+      fail-fast: false
+      matrix:
+        pkg:
+          - desktop_auth0_flutter
+          - uri_scheme_registration
+    defaults:
+      run:
+        working-directory: packages/${{ matrix.pkg }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
+        id: changes
+        with:
+          filters: |
+            src:
+              - 'packages/${{ matrix.pkg }}/**'
+      - if: steps.changes.outputs.src == 'true'
+        name: Setup Flutter SDK
+        uses: flutter-actions/setup-flutter@v4.0
+        with:
+          version: 3.35.3
+          cache: true
+          cache-sdk: true
+          cache-key: pub-${{ runner.os }}-${{ hashFiles('pubspec.lock') }}
+      - if: steps.changes.outputs.src == 'true'
+        name: Get dependencies
+        run: dart pub get
+      - if: steps.changes.outputs.src == 'true'
+        name: Format
+        run: dart format --output=none --set-exit-if-changed .
+      - if: steps.changes.outputs.src == 'true'
+        name: Analyze
+        run: dart analyze
+      - if: steps.changes.outputs.src == 'true'
+        name: Test
+        run: dart test
