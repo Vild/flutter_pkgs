@@ -7,7 +7,7 @@ A generic and simple desktop Auth0 platform implementation for adding desktop pl
 This package bridges the gap between the official Auth0 Flutter SDK (which supports mobile platforms + macOS) and desktop platforms by implementing custom platform interfaces.
 It does this by extending CredentialsManagerPlatform & Auth0FlutterWebAuthPlatform.
 
-For the scheme registration it uses `uri_scheme_registration`, and for the actually management/dataflow <https://github.com/llfbandit/app_links/> is used.
+For the scheme registration it uses <https://pub.dev/packages/uri_scheme_registration>, and for the actually management/dataflow <https://pub.dev/packages/app_links> is used.
 Make sure to follow app_links configuration for Linux and Windows.
 
 ## Usage
