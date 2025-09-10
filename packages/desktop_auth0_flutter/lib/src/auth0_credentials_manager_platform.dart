@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:auth0_flutter_platform_interface/auth0_flutter_platform_interface.dart';
 import 'package:desktop_auth0_flutter/src/extensions.dart';
@@ -24,7 +25,7 @@ final class Auth0CredentialsManagerPlatformGeneric extends CredentialsManagerPla
     final newOauth2Cred = await oauth2Cred.refresh(identifier: clientId);
     final newCredentials = newOauth2Cred.toAuth0Credentials();
     await storage.write(key: _key, value: jsonEncode(newCredentials.toMap()));
-    return credentials;
+    return newCredentials;
   }
 
   @override
@@ -38,8 +39,8 @@ final class Auth0CredentialsManagerPlatformGeneric extends CredentialsManagerPla
           throw Exception('No data in credentials key');
         }
         final credentials = Credentials.fromMap(jsonDecode(data) as Map<String, dynamic>);
-        // Check if credentials expire within 1 minute and refresh if needed
-        if (credentials.expiresAt.isAfter(DateTime.now().add(const Duration(minutes: 1)))) {
+        final minTtlDuration = Duration(seconds: max(request.options?.minTtl ?? 0, 60));
+        if (credentials.expiresAt.isAfter(DateTime.now().add(minTtlDuration))) {
           return credentials;
         }
 
@@ -95,7 +96,18 @@ final class Auth0CredentialsManagerPlatformGeneric extends CredentialsManagerPla
   @override
   Future<bool> hasValidCredentials(CredentialsManagerRequest<HasValidCredentialsOptions> request) async =>
       _lock.synchronized(() async {
-        final credentials = await storage.read(key: _key);
-        return credentials != null;
+        if (!(await storage.containsKey(key: _key))) {
+          return false;
+        }
+        final data = await storage.read(key: _key);
+        if (data == null) {
+          return false;
+        }
+        final credentials = Credentials.fromMap(jsonDecode(data) as Map<String, dynamic>);
+        final minTtlDuration = Duration(seconds: max(request.options?.minTtl ?? 0, 60));
+        if (credentials.expiresAt.isAfter(DateTime.now().add(minTtlDuration))) {
+          return true;
+        }
+        return false;
       });
 }

@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.2
+
+- BUG: Fix minTTL logic
+- BUG: Didn't return refresh credentials
+
 ## 0.1.1
 
 - Better docs
