@@ -1,6 +1,6 @@
 name: desktop_auth0_flutter
 description: Generic auth0 implementation for the app, to support linux and windows
-version: 0.1.2
+version: 0.2.0
 homepage: https://github.com/Vild/flutter_pkgs
 
 resolution: workspace
