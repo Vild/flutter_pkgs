@@ -4,15 +4,21 @@ import 'dart:convert';
 import 'package:app_links/app_links.dart';
 import 'package:auth0_flutter_platform_interface/auth0_flutter_platform_interface.dart';
 import 'package:desktop_auth0_flutter/src/extensions.dart';
+import 'package:desktop_auth0_flutter/src/init_options.dart';
 import 'package:oauth2/oauth2.dart' as oauth2;
 import 'package:url_launcher/url_launcher.dart';
 
 final class Auth0FlutterWebAuthPlatformGeneric extends Auth0FlutterWebAuthPlatform {
-  Auth0FlutterWebAuthPlatformGeneric(this._desktopAppLinks) : super();
+  Auth0FlutterWebAuthPlatformGeneric(this._desktopAppLinks, this._waitUrlTimeoutBuilder) : super();
 
   final AppLinks _desktopAppLinks;
-  static void register({AppLinks? appLinks}) {
-    Auth0FlutterWebAuthPlatform.instance = Auth0FlutterWebAuthPlatformGeneric(appLinks ?? AppLinks());
+  final WaitUrlTimeoutBuilder _waitUrlTimeoutBuilder;
+  static void register({
+    required WaitUrlTimeoutBuilder waitUrlTimeoutBuilder,
+    AppLinks? appLinks,
+  }) {
+    Auth0FlutterWebAuthPlatform.instance =
+        Auth0FlutterWebAuthPlatformGeneric(appLinks ?? AppLinks(), waitUrlTimeoutBuilder);
   }
 
   /// Waits for a URL callback after launching the browser for authentication.
@@ -72,8 +78,7 @@ final class Auth0FlutterWebAuthPlatformGeneric extends Auth0FlutterWebAuthPlatfo
     );
 
     // Wait for authorization code with timeout
-    // TODO: Allow timeout to be configured
-    final value = await _waitUrl(authUrl, Future<String?>.delayed(const Duration(minutes: 1), () => null));
+    final value = await _waitUrl(authUrl, _waitUrlTimeoutBuilder(WaitUrlTimeoutType.login));
     if (value == null) {
       throw TimeoutException('Authorization code not received');
     }
@@ -95,7 +100,6 @@ final class Auth0FlutterWebAuthPlatformGeneric extends Auth0FlutterWebAuthPlatfo
     );
 
     // Launch logout URL and wait for callback
-    // TODO: Allow timeout to be configured
-    await _waitUrl(logoutUrl, Future<String?>.delayed(const Duration(minutes: 1), () => null));
+    await _waitUrl(logoutUrl, _waitUrlTimeoutBuilder(WaitUrlTimeoutType.logout));
   }
 }

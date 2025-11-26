@@ -12,7 +12,10 @@ Future<void> initDesktopAuth0Flutter(
 
   // Register our custom platform implementations
   Auth0CredentialsManagerPlatformGeneric.register();
-  Auth0FlutterWebAuthPlatformGeneric.register();
+  Auth0FlutterWebAuthPlatformGeneric.register(
+    appLinks: options.appLinks,
+    waitUrlTimeoutBuilder: options.waitUrlTimeoutBuilder,
+  );
 
   // Register platform-specific URL scheme handlers
   registerScheme(
